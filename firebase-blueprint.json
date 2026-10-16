@@ -1,0 +1,83 @@
+{
+  "entities": {
+    "User": {
+      "title": "User Profile",
+      "description": "User account and profile information",
+      "type": "object",
+      "properties": {
+        "uid": { "type": "string", "description": "Firebase Auth UID" },
+        "name": { "type": "string", "description": "Full name" },
+        "email": { "type": "string", "format": "email", "description": "User email" },
+        "username": { "type": "string", "description": "Unique username" },
+        "bio": { "type": "string", "description": "Short bio" },
+        "avatarUrl": { "type": "string", "format": "url", "description": "Profile picture URL" },
+        "theme": { "type": "string", "enum": ["light", "dark", "gradient"], "description": "Page theme" },
+        "buttonStyle": { "type": "string", "enum": ["rounded", "square", "outline", "shadow"], "description": "Link button style" },
+        "backgroundColor": { "type": "string", "description": "Hex color code" },
+        "backgroundImage": { "type": "string", "format": "url", "description": "Background image URL" },
+        "socialLinks": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "properties": {
+              "platform": { "type": "string" },
+              "url": { "type": "string", "format": "url" }
+            }
+          }
+        },
+        "isPublic": { "type": "boolean", "description": "Whether the profile is visible to everyone" },
+        "createdAt": { "type": "string", "format": "date-time" },
+        "updatedAt": { "type": "string", "format": "date-time" }
+      },
+      "required": ["uid", "email", "username"]
+    },
+    "Link": {
+      "title": "Link",
+      "description": "A link on the user's profile page",
+      "type": "object",
+      "properties": {
+        "userId": { "type": "string", "description": "Owner's UID" },
+        "title": { "type": "string", "description": "Display title" },
+        "url": { "type": "string", "format": "url", "description": "Target URL" },
+        "icon": { "type": "string", "description": "Emoji or icon identifier" },
+        "isActive": { "type": "boolean", "description": "Whether the link is visible" },
+        "order": { "type": "integer", "description": "Display order" },
+        "clickCount": { "type": "integer", "description": "Total clicks" },
+        "thumbnail": { "type": "string", "format": "url", "description": "Link thumbnail image" },
+        "createdAt": { "type": "string", "format": "date-time" },
+        "updatedAt": { "type": "string", "format": "date-time" }
+      },
+      "required": ["userId", "title", "url"]
+    },
+    "Click": {
+      "title": "Click Analytics",
+      "description": "Record of a click on a link",
+      "type": "object",
+      "properties": {
+        "linkId": { "type": "string", "description": "ID of the link clicked" },
+        "userId": { "type": "string", "description": "Owner of the link" },
+        "country": { "type": "string" },
+        "city": { "type": "string" },
+        "device": { "type": "string" },
+        "browser": { "type": "string" },
+        "referrer": { "type": "string" },
+        "clickedAt": { "type": "string", "format": "date-time" }
+      },
+      "required": ["linkId", "userId", "clickedAt"]
+    }
+  },
+  "firestore": {
+    "/users/{userId}": {
+      "schema": "User",
+      "description": "User profile documents"
+    },
+    "/links/{linkId}": {
+      "schema": "Link",
+      "description": "Individual links"
+    },
+    "/clicks/{clickId}": {
+      "schema": "Click",
+      "description": "Click analytic records"
+    }
+  }
+}
